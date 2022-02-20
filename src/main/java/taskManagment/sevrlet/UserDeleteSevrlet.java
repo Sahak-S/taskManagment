@@ -13,6 +13,7 @@ import java.io.IOException;
 public class UserDeleteSevrlet extends HttpServlet {
 
     private UserManager userManager = new UserManager();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String idStr = req.getParameter("id");

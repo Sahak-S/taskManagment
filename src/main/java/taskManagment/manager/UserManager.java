@@ -82,6 +82,7 @@ public class UserManager {
         return null;
     }
 
+
     public List<User> getAllUsers() {
         String sql = "select * from user";
         List<User> result = new ArrayList<>();
@@ -141,5 +142,29 @@ public class UserManager {
         return null;
     }
 
+    public List<User>  searchUser(String keyword) {
+        String sql = "select * from user where name like '%" + keyword + "%'or surname like '%"+ keyword +"'";
 
+        try {
+            Statement    statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            List<User> result = new ArrayList<>();
+
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt(1));
+                user.setName(resultSet.getString(2));
+                user.setSurname(resultSet.getString("surname"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPassword(resultSet.getString("password"));
+                user.setType(UserType.valueOf(resultSet.getString("type")));
+                result.add(user) ;
+            }
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
 }

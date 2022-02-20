@@ -7,14 +7,15 @@
     <title>Title</title>
 </head>
 <body>
-
+<a href="/logout">Logout</a>
 <% List<User> users = (List<User>) request.getAttribute("users"); %>
 <% List<Task> tasks = (List<Task>) request.getAttribute("tasks"); %>
 
 <div style="width: 800px">
     <div style="width: 50%;float: left">
+
         Add User:<br>
-        <form action="/userRegistr" method="post">
+        <form action="/register" method="post">
             <input type="text" name="name" placeholder="name"><br>
             <input type="text" name="surname" placeholder="surname"><br>
             <input type="text" name="email" placeholder="email"><br>
@@ -60,6 +61,11 @@
     </div>
 
     <div>
+
+        <form action="/search" method="post">
+            <input type="text" name="keyword">
+            <input type="submit" value="search">
+        </form>
         All Users:<br>
         <table border="1">
             <tr>
@@ -81,7 +87,7 @@
                 </td>
                 <td><%=user.getType().name()%>
                 </td>
-                <td><a href="/deleteUser?id=<%=user.getId()%>">Delete</a></td>
+                <td><a href="/deleteUser?id=<%=user.getId()%>">Delete</a> / <a href="/editUser?id=<%=user.getId()%>">Edit</a></td>
             </tr>
             <%
                 }
@@ -90,6 +96,10 @@
     </div>
 
     <div>
+        <form action="/taskSearch" method="post">
+            <input type="text" name="keyword">
+            <input type="submit" value="search">
+        </form>
         All Tasks:<br>
 
         <table border="1">

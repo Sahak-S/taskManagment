@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "/userRegistr")
-public class UserRegistrSevrlet extends HttpServlet {
+@WebServlet(urlPatterns = "/register")
+public class UserRegisterSevrlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -22,7 +22,6 @@ public class UserRegistrSevrlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         String type = req.getParameter("type");
-
 
         UserManager userManager = new UserManager();
         userManager.addUser(User.builder()

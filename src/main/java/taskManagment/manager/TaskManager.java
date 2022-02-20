@@ -4,6 +4,8 @@ package taskManagment.manager;
 import taskManagment.db.DBConnectionProvider;
 import taskManagment.model.Task;
 import taskManagment.model.TaskStatus;
+import taskManagment.model.User;
+import taskManagment.model.UserType;
 
 
 import java.sql.*;
@@ -73,12 +75,10 @@ public class TaskManager {
     public List<Task> getAllTasksByUserId(int userid) {
         String sql = "select * from task where user_id = ?";
         List<Task> tasks = new ArrayList<>();
-
-
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, userid);
-            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(); //
             tasks = getTasksFromResultSet(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,7 +86,19 @@ public class TaskManager {
         return tasks;
     }
 
-    private List<Task> getTasksFromResultSet(ResultSet resultSet) throws SQLException {
+    public void updateTaskStatus(int taskId, String newStatus) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE task set status =? where id = ?");
+            preparedStatement.setString(1, newStatus);
+            preparedStatement.setInt(2, taskId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public List<Task> getTasksFromResultSet(ResultSet resultSet) throws SQLException {
         List<Task> tasks = new ArrayList<>();
         while (resultSet.next()) {
             Task task = new Task();
@@ -106,5 +118,36 @@ public class TaskManager {
         return tasks;
     }
 
+
+    public List<Task>  searchTask(String keyword) {
+        String sql = "select * from task where name like '%" + keyword +"'";
+
+        try {
+            Statement    statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            List<Task> tasks = new ArrayList<>();
+
+            while (resultSet.next()) {
+                Task task = new Task();
+                task.setId(resultSet.getInt(1));
+                task.setName(resultSet.getString(2));
+                task.setDescription(resultSet.getString("description"));
+                try {
+                    task.setDataline(sdf.parse(resultSet.getString("dataline")));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                task.setTaskStatus(TaskStatus.valueOf(resultSet.getString("status")));
+                task.setUserId(resultSet.getInt("user_id"));
+                task.setUser(userManager.getUserById(task.getUserId()));
+                tasks.add(task);
+            }
+            return tasks;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
 
 }

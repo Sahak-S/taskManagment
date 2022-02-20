@@ -2,5 +2,6 @@ package taskManagment.model;
 
 public enum TaskStatus {
 
-    NEW,IN_PROGRES,FINISHID
+    NEW,IN_PROGRESS,FINISHED
+
 }
